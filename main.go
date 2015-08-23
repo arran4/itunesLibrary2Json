@@ -185,7 +185,8 @@ func main() {
 					if out, err := json.MarshalIndent(result, "  ", "  "); err != nil {
 						log.Printf("Error marshalling map: %v", err)
 					} else {
-						fmt.Print(string(out))
+						ioutil.WriteFile("out.json", out, 666)
+						fmt.Print("Done")
 					}
 //					return
 				}
