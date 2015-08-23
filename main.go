@@ -6,6 +6,7 @@ import (
 	"log"
 	"bytes"
 	"encoding/json"
+	"fmt"
 )
 
 func getValue(decoder *xml.Decoder) interface{} {
@@ -87,13 +88,13 @@ func getValue(decoder *xml.Decoder) interface{} {
 			case xml.EndElement:
 				return nexttokenraw
 			case xml.Comment:
-				log.Printf("Comment ignored: %v", nexttoken)
+//				log.Printf("Comment ignored: %v", nexttoken)
 				continue
 			case xml.CharData:
-				log.Printf("CharData ignored: %v", nexttoken)
+//				log.Printf("CharData ignored: %v", nexttoken)
 				continue
 			default:
-				log.Printf("Unknown token; %s", nexttoken)
+//				log.Printf("Unknown token; %s", nexttoken)
 				continue;
 			}
 		}
@@ -108,7 +109,6 @@ func getKeyValue(decoder *xml.Decoder, token *xml.StartElement) (key string, val
 }
 
 func makeDict(decoder *xml.Decoder, token xml.Token) (result map[string]interface{}) {
-	log.Printf("1\n")
 	if token == nil { return }
 	switch token := token.(type) {
 	case xml.StartElement:
@@ -132,13 +132,13 @@ func makeDict(decoder *xml.Decoder, token xml.Token) (result map[string]interfac
 			case xml.EndElement:
 				return
 			case xml.Comment:
-				log.Printf("Comment ignored: %v", nexttoken)
+//				log.Printf("Comment ignored: %v", nexttoken)
 				continue
 			case xml.CharData:
-				log.Printf("CharData ignored: %v", nexttoken)
+//				log.Printf("CharData ignored: %v", nexttoken)
 				continue
 			default:
-				log.Printf("Unknown token; %s", nexttoken)
+//				log.Printf("Unknown token; %s", nexttoken)
 				continue
 			}
 //			log.Printf("Of type: %s", nextthis)
@@ -173,7 +173,9 @@ func main() {
 		var err error
     	for ;; {
 			if token, err = decoder.Token(); err != nil {
-				log.Printf("Error getting next token: %v", err)
+				if err.Error() != "EOF" {
+					log.Printf("Error getting next token: %v", err)
+				}
 				return
 			} else {
 //				log.Printf("%v", token)
@@ -183,7 +185,7 @@ func main() {
 					if out, err := json.MarshalIndent(result, "  ", "  "); err != nil {
 						log.Printf("Error marshalling map: %v", err)
 					} else {
-						log.Printf("Got dict %v\n", string(out))
+						fmt.Print(string(out))
 					}
 //					return
 				}
