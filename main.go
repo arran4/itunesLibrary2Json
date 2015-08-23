@@ -184,8 +184,9 @@ func main() {
 					result := makeDict(decoder, token)
 					if out, err := json.MarshalIndent(result, "  ", "  "); err != nil {
 						log.Printf("Error marshalling map: %v", err)
+					} else if err := ioutil.WriteFile("out.json", out, 0644); err != nil {
+						log.Printf("Error writing file: %v", err)
 					} else {
-						ioutil.WriteFile("out.json", out, 666)
 						fmt.Print("Done")
 					}
 //					return
